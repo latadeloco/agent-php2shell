@@ -187,6 +187,8 @@ El flujo es siempre:
 
 Por defecto el agente responde en **10–12 líneas** y no repite la salida de las herramientas. Los informes guardados contienen toda la información. Si necesita el detalle completo, pida **“detalle”**, **“explica más”** o **“informe completo”**.
 
+Los ratios de consumo medidos están en [docs/BENCHMARK.md](docs/BENCHMARK.md).
+
 ### Uso manual de los wrappers
 
 ```bash
