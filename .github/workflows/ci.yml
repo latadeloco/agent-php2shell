@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sintaxis
+        run: |
+          find . -name '*.sh' -print0 | xargs -0 -n1 bash -n
+
+      - name: ShellCheck (errores)
+        uses: ludeeus/action-shellcheck@master
+        with:
+          severity: error
+
+      - name: Tests
+        run: |
+          bash tests/render-test.sh
+          bash tests/preflight-test.sh
+          bash tests/wrapper-test.sh

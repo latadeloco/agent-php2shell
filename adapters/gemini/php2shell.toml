@@ -1,0 +1,5 @@
+description = "Comprueba y tria php2shell (CVE-2026-109618/109619) en webs y proyectos PHP, con permiso explícito."
+
+prompt = '''
+@@CORE@@
+'''

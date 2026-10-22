@@ -1,0 +1,9 @@
+*.bak.*
+*.tmp
+.DS_Store
+.env
+.env.*
+reports/
+node_modules/
+__pycache__/
+*.pyc
