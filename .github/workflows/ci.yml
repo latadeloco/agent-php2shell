@@ -24,6 +24,7 @@ jobs:
           bash tests/render-test.sh
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
+          bash tests/wiki-test.sh
 
   macos:
     runs-on: macos-latest
@@ -39,6 +40,7 @@ jobs:
           bash tests/render-test.sh
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
+          bash tests/wiki-test.sh
 
   windows:
     runs-on: windows-latest
@@ -58,6 +60,7 @@ jobs:
         run: |
           bash tests/render-test.sh
           bash tests/wrapper-test.sh
+          bash tests/wiki-test.sh
 
       - name: Instalación en HOME temporal
         run: |

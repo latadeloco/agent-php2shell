@@ -27,7 +27,8 @@ info ""
 info "2. Tests del repositorio"
 for test in "$REPO_DIR/tests/render-test.sh" \
             "$REPO_DIR/tests/preflight-test.sh" \
-            "$REPO_DIR/tests/wrapper-test.sh"; do
+            "$REPO_DIR/tests/wrapper-test.sh" \
+            "$REPO_DIR/tests/wiki-test.sh"; do
   if [[ -f "$test" ]]; then
     if bash "$test"; then
       ok "$(basename "$test")"

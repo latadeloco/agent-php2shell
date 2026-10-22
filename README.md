@@ -6,6 +6,18 @@ Usa el scanner oficial de **Assetnote** y un script de triaje de solo lectura de
 
 > **Aviso importante:** la prueba completa es activa y **puede tumbar el servidor**. Envía hasta unos 29 MB y puede dejar PHP-FPM/mod_php caído unos segundos. Úsala solo en servidores propios o con autorización por escrito, preferiblemente en staging o en una ventana de mantenimiento. El agente exige `--i-have-permission` y ofrece un `--dry-run` para revisar el comando antes.
 
+## Documentación
+
+La guía completa para usuario final está en la wiki:
+
+https://github.com/latadeloco/agent-php2shell/wiki
+
+El contenido fuente está en [`wiki/`](wiki/) y se publica con:
+
+```bash
+./scripts/publish-wiki.sh
+```
+
 ## Qué hace
 
 1. **Revisión previa:** comprueba herramientas, versiones, hashes y permisos antes de ejecutar nada.
