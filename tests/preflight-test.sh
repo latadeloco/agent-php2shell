@@ -52,6 +52,16 @@ else
   FAIL=1
 fi
 
+# 2b. --brief debe producir un resumen de pocas líneas.
+BRIEF_OUT="$(run_preflight "$BIN:/usr/bin:/bin" --bootstrap --brief 2>&1)"
+BRIEF_LINES="$(printf '%s\n' "$BRIEF_OUT" | wc -l | tr -d ' ')"
+if [[ "$BRIEF_LINES" -le 3 ]]; then
+  echo "[ok] --brief -> $BRIEF_LINES línea(s)"
+else
+  echo "[FAIL] --brief demasiado largo: $BRIEF_LINES líneas" >&2
+  FAIL=1
+fi
+
 # 3. Hash del triaje alterado: debe fallar con código 2.
 printf 'contenido alterado\n' > "$VENDOR/php2shell-triage.sh"
 if env \

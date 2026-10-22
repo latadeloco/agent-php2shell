@@ -10,6 +10,7 @@ php2shell_init_paths
 MODE="check"
 JSON=0
 QUIET=0
+BRIEF=0
 
 usage() {
   cat <<EOF
@@ -18,6 +19,7 @@ Uso: $(basename "$0") [opciones]
   --check       Comprobación completa (por defecto)
   --bootstrap   Solo herramientas del sistema, antes de instalar
   --smoke       Comprobación completa + scanner.py --help
+  --brief       Resumen de una línea y solo errores
   --json        Salida JSON
   --quiet       No mostrar la tabla de comandos
   -h, --help    Esta ayuda
@@ -31,6 +33,7 @@ while [[ $# -gt 0 ]]; do
     --check) MODE="check" ;;
     --bootstrap) MODE="bootstrap" ;;
     --smoke) MODE="smoke" ;;
+    --brief) BRIEF=1 ;;
     --json) JSON=1 ;;
     --quiet) QUIET=1 ;;
     -h|--help) usage; exit 0 ;;
@@ -112,7 +115,7 @@ check_optional_tools() {
       [[ "$JSON" == "1" ]] || ok "$name: ${version:-disponible}"
     else
       record_tool "$name" "" "" false
-      [[ "$JSON" == "1" ]] || info " ${C_YELLOW}[--]${C_RESET} $name no encontrado (opcional)"
+      [[ "$JSON" == "1" || "$BRIEF" == "1" ]] || info " ${C_YELLOW}[--]${C_RESET} $name no encontrado (opcional)"
     fi
   done
 }
@@ -238,7 +241,7 @@ audit_permissions() {
 }
 
 print_commands() {
-  [[ "$QUIET" == "1" ]] && return 0
+  [[ "$QUIET" == "1" || "$BRIEF" == "1" ]] && return 0
   hr
   info "${C_BOLD}Comandos que puede usar el agente${C_RESET}"
   hr
@@ -305,13 +308,21 @@ if [[ "$JSON" == "1" ]]; then
   done
   printf ']}\n'
 else
-  print_commands
-  hr
-  case "$STATUS" in
-    0) info "${C_GREEN}Todo listo.${C_RESET}" ;;
-    1) info "${C_RED}Faltan herramientas o archivos obligatorios.${C_RESET}" ;;
-    2) info "${C_RED}Hay un problema de integridad o de permisos.${C_RESET}" ;;
-  esac
+  if [[ "$BRIEF" == "1" ]]; then
+    case "$STATUS" in
+      0) info "Preflight OK: herramientas, archivos y permisos correctos." ;;
+      1) info "Preflight con errores: faltan herramientas o archivos." ;;
+      2) info "Preflight con errores: integridad o permisos." ;;
+    esac
+  else
+    print_commands
+    hr
+    case "$STATUS" in
+      0) info "${C_GREEN}Todo listo.${C_RESET}" ;;
+      1) info "${C_RED}Faltan herramientas o archivos obligatorios.${C_RESET}" ;;
+      2) info "${C_RED}Hay un problema de integridad o de permisos.${C_RESET}" ;;
+    esac
+  fi
 fi
 
 exit "$STATUS"

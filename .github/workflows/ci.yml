@@ -24,6 +24,8 @@ jobs:
           bash tests/render-test.sh
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
+          bash tests/triage-test.sh
+          bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
   macos:
@@ -40,6 +42,8 @@ jobs:
           bash tests/render-test.sh
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
+          bash tests/triage-test.sh
+          bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
   windows:
@@ -50,7 +54,9 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v9
+        with:
+          enable-cache: false
 
       - name: Sintaxis
         run: |
@@ -60,6 +66,8 @@ jobs:
         run: |
           bash tests/render-test.sh
           bash tests/wrapper-test.sh
+          bash tests/triage-test.sh
+          bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
       - name: Instalación en HOME temporal

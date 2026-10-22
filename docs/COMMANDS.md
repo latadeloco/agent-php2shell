@@ -6,16 +6,31 @@ Este documento es el contrato de comandos del agente. Los wrappers son iguales p
 
 | Herramienta | Para qué | Comando | Escribe | Red | Permiso |
 |---|---|---|---|---|---|
-| `preflight` | Revisar herramientas, hashes y permisos | `preflight.sh --check` | No | No | allow |
+| `preflight` | Revisar herramientas, hashes y permisos | `preflight.sh --brief` | No | No | allow |
+| `preflight --check` | Revisión completa (detalle) | `preflight.sh --check` | No | No | allow |
 | `scan` | Escaneo activo | `php2shell-scan.sh --i-have-permission -u <URL>` | Sí (JSON) | Sí | ask |
 | `scan --dry-run` | Revisar el comando | `php2shell-scan.sh --dry-run -u <URL>` | No | No | ask |
-| `triage` | Triaje de solo lectura | `php2shell-triage.sh <ruta>` | Sí (TXT) | No | ask |
+| `triage` | Triaje de solo lectura, resumen | `php2shell-triage.sh --summary <ruta>` | Sí (TXT) | No | ask |
+| `triage --full` | Triaje con todo el detalle | `php2shell-triage.sh <ruta>` | Sí (TXT) | No | ask |
 | `curl` | Leer cabeceras | `curl -sS -D - -o /dev/null --max-time 20 ...` | No | Sí | allow |
 | `php -v` | Versión local | `php -v` | No | No | allow |
 | `date` | Nombre del informe | `date -u +%Y%m%dT%H%M%SZ` | No | No | allow |
 | `sha256sum` | Verificar scripts (Linux) | `sha256sum <DATA_DIR>/*` | No | No | allow |
 | `shasum` | Verificar scripts (macOS) | `shasum -a 256 <DATA_DIR>/*` | No | No | allow |
 | `sudo` | Triaje completo | `sudo bash <VENDOR_DIR>/php2shell-triage.sh <ruta>` | Sí | No | **manual, nunca por el agente** |
+
+## Presupuesto de respuesta
+
+Por defecto el agente responde en **10–12 líneas**:
+
+- Preflight: 3 viñetas.
+- Permiso: 2 líneas + pregunta.
+- Informe final: máximo 10 líneas.
+- No repite la salida de las herramientas ni copia JSON/TXT.
+- No repite avisos ya mostrados.
+- Amplía solo si el usuario pide **“detalle”**, **“explica más”** o **“informe completo”**.
+
+Los modos `preflight --check` y `triage` sin `--summary` quedan para cuando se pide detalle.
 
 ## Permisos de opencode
 
@@ -71,11 +86,10 @@ Archivo `~/.gemini/commands/php2shell.toml` (global) o `.gemini/commands/php2she
 
 ## Flujo de seguridad
 
-1. `preflight --check`
-2. Confirmación del usuario
-3. `scan --dry-run`
-4. Confirmación del usuario
-5. `scan --i-have-permission`
-6. Informe
-7. Oferta de triaje
-8. `triage`
+1. `preflight --brief`
+2. `scan --dry-run`
+3. Confirmación del usuario
+4. `scan --i-have-permission`
+5. Informe
+6. Oferta de triaje
+7. `triage --summary`

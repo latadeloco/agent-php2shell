@@ -42,7 +42,7 @@ else
 fi
 
 info() { printf '%s\n' "$*"; }
-ok() { printf ' %s[ok]%s %s\n' "$C_GREEN" "$C_RESET" "$*"; }
+ok() { [[ "${BRIEF:-0}" == "1" ]] && return 0; printf ' %s[ok]%s %s\n' "$C_GREEN" "$C_RESET" "$*"; }
 warn() { printf ' %s[aviso]%s %s\n' "$C_YELLOW" "$C_RESET" "$*"; }
 err() { printf ' %s[error]%s %s\n' "$C_RED" "$C_RESET" "$*" >&2; }
 hr() { printf '%s\n' "------------------------------------------------------------"; }

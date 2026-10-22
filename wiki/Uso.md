@@ -4,6 +4,12 @@ Esta página explica cómo pedir al agente que revise una web o un proyecto, qu�
 
 > **Recuerde:** la prueba completa es activa y puede tumbar el servidor unos segundos. Úsela solo con autorización y, preferiblemente, en un entorno de pruebas o en una ventana de mantenimiento.
 
+## Modo breve
+
+Por defecto, el agente responde en **10–12 líneas** y no repite la salida de las herramientas. Los informes guardados contienen toda la información.
+
+Si necesita más contexto, pida **“detalle”**, **“explica más”** o **“informe completo”**. El agente ampliará solo la parte que solicite.
+
 ## Antes de empezar
 
 Tenga a mano:

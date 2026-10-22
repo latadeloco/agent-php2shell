@@ -8,13 +8,15 @@ source "$SCRIPT_DIR/lib.sh"
 php2shell_init_paths
 
 DRY_RUN=0
+SUMMARY=0
 TARGET=""
 
 usage() {
   cat <<EOF
-Uso: $(basename "$0") [--dry-run] [ruta_del_proyecto]
+Uso: $(basename "$0") [--dry-run] [--summary] [ruta_del_proyecto]
 
   --dry-run   Muestra el comando exacto sin ejecutar el triaje.
+  --summary   Guarda el registro completo y muestra solo el veredicto.
   -h, --help  Esta ayuda.
 
 Si no indicas ruta, se usa el directorio actual.
@@ -26,6 +28,7 @@ EOF
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --dry-run) DRY_RUN=1 ;;
+    --summary) SUMMARY=1 ;;
     -h|--help) usage; exit 0 ;;
     -*)
       die "Opción desconocida: $1"
@@ -71,5 +74,27 @@ fi
 
 mkdir -p "$STATE_DIR"
 info "Guardando informe de triaje en: $OUT_FILE"
-bash "$TRIAGE_SCRIPT" "$TARGET" 2>&1 | tee "$OUT_FILE"
-exit "${PIPESTATUS[0]}"
+FULL_TMP="$(mktemp "${TMPDIR:-/tmp}/php2shell-triage.XXXXXX")"
+set +e
+bash "$TRIAGE_SCRIPT" "$TARGET" > "$FULL_TMP" 2>&1
+CODE=$?
+set -e
+cp "$FULL_TMP" "$OUT_FILE"
+
+if [[ "$SUMMARY" == "1" ]]; then
+  info "Informe completo: $OUT_FILE"
+  FLAGS="$(grep -E '^ *\[FLAG\]' "$FULL_TMP" || true)"
+  if [[ -n "$FLAGS" ]]; then
+    printf '%s\n' "$FLAGS"
+  fi
+  if grep -q '^== Verdict ==' "$FULL_TMP"; then
+    sed -n '/^== Verdict ==/,$p' "$FULL_TMP"
+  else
+    tail -n 12 "$FULL_TMP"
+  fi
+else
+  cat "$FULL_TMP"
+fi
+
+rm -f "$FULL_TMP"
+exit "$CODE"

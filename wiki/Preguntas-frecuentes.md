@@ -59,6 +59,12 @@ El agente se conecta al servidor que usted indique para hacer las comprobaciones
 
 No envíe informes con datos internos a servicios públicos ni a terceros.
 
+## ¿Por qué el agente responde tan breve?
+
+Para reducir el consumo de tokens y facilitar la lectura. Por defecto responde en 10–12 líneas y no repite la salida de las herramientas.
+
+Si necesita más detalle, escriba **“detalle”**, **“explica más”** o **“informe completo”**. Los informes guardados siempre contienen toda la información.
+
 ## ¿Qué significa NO SIGNAL?
 
 Significa que no se ha visto el fallo, pero que no hay información suficiente para confirmar que esté corregido. **No significa que el servidor sea seguro.**

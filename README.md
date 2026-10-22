@@ -183,10 +183,17 @@ El flujo es siempre:
 5. Escaneo con `--i-have-permission`.
 6. Informe y, si aplica, oferta de triaje.
 
+### Modo breve
+
+Por defecto el agente responde en **10–12 líneas** y no repite la salida de las herramientas. Los informes guardados contienen toda la información. Si necesita el detalle completo, pida **“detalle”**, **“explica más”** o **“informe completo”**.
+
 ### Uso manual de los wrappers
 
 ```bash
-# Revisión previa
+# Revisión previa resumida
+~/.local/share/php2shell-agent/tools/preflight.sh --brief
+
+# Revisión previa completa, si necesita el detalle
 ~/.local/share/php2shell-agent/tools/preflight.sh --check
 
 # Ver el comando exacto sin enviar tráfico
@@ -194,9 +201,12 @@ El flujo es siempre:
 
 # Escaneo real (solo con autorización)
 ~/.local/share/php2shell-agent/tools/php2shell-scan.sh \
-  --i-have-permission -u https://example.com --timeout 90 -t 1 -v --all-results
+  --i-have-permission -u https://example.com --timeout 90 -t 1 --all-results
 
-# Triaje de solo lectura
+# Triaje de solo lectura, con resumen
+~/.local/share/php2shell-agent/tools/php2shell-triage.sh --summary /ruta/al/proyecto
+
+# Triaje completo, si necesita el detalle
 ~/.local/share/php2shell-agent/tools/php2shell-triage.sh /ruta/al/proyecto
 ```
 

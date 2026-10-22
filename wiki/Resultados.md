@@ -74,7 +74,7 @@ Hay dos tipos de archivo:
 - Un archivo `.json` con el resultado del escáner.
 - Un archivo `.txt` con el resultado del triaje, si se ha ejecutado.
 
-El agente le indicará la ruta exacta al terminar.
+El agente le indicará la ruta exacta al terminar. El chat muestra un resumen; los archivos contienen el detalle completo.
 
 ## Sobre los códigos de salida
 
