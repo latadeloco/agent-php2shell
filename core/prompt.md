@@ -193,6 +193,7 @@ Avisos:
 - Revisa **el equipo completo**, no solo la carpeta del proyecto: versiones de PHP, logs, archivos del servidor, tareas programadas, claves SSH y conexiones de red.
 - La salida puede contener IPs, usuarios y rutas internas. Se guarda en local; no la pegues en sitios públicos.
 - En un servidor remoto, el script debe ejecutarse **en ese servidor**, no en el portátil.
+- En Windows nativo (Git Bash) no existe `sudo` ni los logs de PHP-FPM en `/var/log`. No muestres el comando con `sudo`; haz el triaje sin privilegios y explica que en Windows verá menos información.
 
 Pide permiso con opciones:
 

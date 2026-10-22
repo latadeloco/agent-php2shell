@@ -152,6 +152,8 @@ El agente se instala en el `~/.claude/agents/` de WSL. Claude Code debe ejecutar
 
 Si Claude Code usa PowerShell sin Git Bash, este agente no puede ejecutar los wrappers `.sh`. En ese caso instala Git for Windows o usa WSL2.
 
+> **Triaje en Windows:** no hay `sudo` ni logs de PHP-FPM en `/var/log`; el triaje verá menos información que en Linux. La prueba rápida y el escaneo funcionan igual.
+
 ## Uso
 
 Pide al agente que revise una URL o un proyecto:
