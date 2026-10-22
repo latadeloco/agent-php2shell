@@ -111,6 +111,18 @@ Si el proyecto está en su ordenador:
 
 El agente no arranca la aplicación por su cuenta.
 
+## Defensa opcional (WAF/IDS)
+
+Si el resultado es **VULNERABLE** o lo pide, el agente puede dejarle reglas de detección para Suricata/Snort, Sigma, ModSecurity y OpenResty. Son opcionales:
+
+- Por defecto solo **alertan**; no bloquean.
+- El perfil `block` solo se usa si lo pide y asume el riesgo de falsos positivos.
+- Se descargan con commit y hash fijados; si no coinciden, no se instalan.
+- Nunca modifican configuraciones del sistema ni usan `sudo`.
+- No incluyen exploits: son firmas para detectar intentos.
+
+El agente solo le dará la ruta; no vuelca las firmas en el chat.
+
 ## Qué no debe hacer
 
 - No pruebe servidores de terceros sin autorización por escrito.

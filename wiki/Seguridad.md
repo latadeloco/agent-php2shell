@@ -74,6 +74,17 @@ En Windows, el agente funciona a través de Git Bash. No hay `sudo` ni los regis
 
 Si Claude Code utiliza PowerShell sin Git Bash, los comandos internos del agente no podrán ejecutarse. Instale Git for Windows o utilice WSL.
 
+## Módulo de defensa
+
+Las reglas de defensa son opcionales:
+
+- No se instalan por defecto.
+- El perfil `alert` solo registra; `block` exige pedirlo.
+- Se verifican por commit y SHA-256, y fallan cerrado.
+- Solo escriben en `~/.local/share/php2shell-agent/vendor/rules/` o en el destino que se indique.
+- Nunca tocan `/etc` ni usan `sudo`.
+- Pueden dar falsos positivos; la regla de *chunked multipart* está excluida por defecto.
+
 ## Limitaciones
 
 - La información de versión que anuncia el servidor puede ser falsa.

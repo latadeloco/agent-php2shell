@@ -9,6 +9,7 @@ php2shell-agent se apoya en el trabajo de otras personas y equipos. Esta página
 | **Assetnote** | Escáner oficial de php2shell | https://github.com/assetnote/php2shell-scanner |
 | **Sairahcaz** | Script de triaje de solo lectura | https://gist.github.com/Sairahcaz/2c22b4a68fd5b75e410c7f9f69f485a0 |
 | **Equipo Calif** | Descubrimiento original de php2shell | https://calif.io/php2shell/ |
+| **Qi Deng (ikow) / GoldraK** | Reglas de defensa (Suricata, Sigma, ModSecurity, Lua) | https://github.com/GoldraK/php2shell-poc |
 
 Fallos tratados:
 
@@ -22,6 +23,7 @@ Para que los resultados sean reproducibles, el instalador descarga versiones con
 - Escáner: commit `353545fe9e72ff85921a84cf396d71b3d15e936e`.
 - Triaje: revisión `ec40176f383156c29a8fa3f60d4a88c82cb683a8`.
 - Huella del triaje: SHA-256 `355a12feb009bc9a2071155c56eec38a67b0c3b9bfdc30014e36a198418b672d`.
+- Reglas de defensa: commit `93df49253e79774e61833938c40aff3b79c6bde1` y SHA-256 por fichero.
 
 El instalador verifica estas versiones antes de usarlas.
 
@@ -36,7 +38,9 @@ Consulte el archivo `SOURCES.md` del repositorio para más detalles.
 
 ## Afiliación
 
-No existe afiliación, patrocinio ni respaldo por parte de Assetnote, Sairahcaz o el equipo Calif.
+No existe afiliación, patrocinio ni respaldo por parte de Assetnote, Sairahcaz, el equipo Calif ni Qi Deng.
+
+Las reglas de defensa no están auditadas por el vendor. El repositorio de origen incluye PoC de explotación que este proyecto no descarga ni redistribuye.
 
 Las marcas y nombres pertenecen a sus respectivos propietarios.
 

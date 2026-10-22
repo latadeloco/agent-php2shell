@@ -69,16 +69,32 @@ if [[ "$DRY_RUN" == "1" ]]; then
   printf '%q ' "${CMD[@]}"
   printf '\n'
   info "Informe: $OUT_FILE"
+  if [[ -f "$TOOLS_DIR/php2shell-session-audit.sh" ]]; then
+    info "Después: auditoría de sesión de solo lectura."
+  fi
   exit 0
 fi
 
 mkdir -p "$STATE_DIR"
 info "Guardando informe de triaje en: $OUT_FILE"
-FULL_TMP="$(mktemp "${TMPDIR:-/tmp}/php2shell-triage.XXXXXX")"
+VENDOR_TMP="$(mktemp "${TMPDIR:-/tmp}/php2shell-triage.XXXXXX")"
+FULL_TMP="$(mktemp "${TMPDIR:-/tmp}/php2shell-triage-full.XXXXXX")"
 set +e
-bash "$TRIAGE_SCRIPT" "$TARGET" > "$FULL_TMP" 2>&1
+bash "$TRIAGE_SCRIPT" "$TARGET" > "$VENDOR_TMP" 2>&1
 CODE=$?
 set -e
+cat "$VENDOR_TMP" > "$FULL_TMP"
+
+AUDIT_SCRIPT="$TOOLS_DIR/php2shell-session-audit.sh"
+if [[ -f "$AUDIT_SCRIPT" ]]; then
+  AUDIT_TMP="$(mktemp "${TMPDIR:-/tmp}/php2shell-session-audit.XXXXXX")"
+  if bash "$AUDIT_SCRIPT" "$TARGET" > "$AUDIT_TMP" 2>&1; then
+    { printf '\n'; cat "$AUDIT_TMP"; } >> "$FULL_TMP"
+  else
+    printf '\n  [info] auditoría de sesión no disponible\n' >> "$FULL_TMP"
+  fi
+  rm -f "$AUDIT_TMP"
+fi
 cp "$FULL_TMP" "$OUT_FILE"
 
 if [[ "$SUMMARY" == "1" ]]; then
@@ -87,14 +103,14 @@ if [[ "$SUMMARY" == "1" ]]; then
   if [[ -n "$FLAGS" ]]; then
     printf '%s\n' "$FLAGS"
   fi
-  if grep -q '^== Verdict ==' "$FULL_TMP"; then
-    sed -n '/^== Verdict ==/,$p' "$FULL_TMP"
+  if grep -q '^== Verdict ==' "$VENDOR_TMP"; then
+    sed -n '/^== Verdict ==/,$p' "$VENDOR_TMP"
   else
-    tail -n 12 "$FULL_TMP"
+    tail -n 12 "$VENDOR_TMP"
   fi
 else
   cat "$FULL_TMP"
 fi
 
-rm -f "$FULL_TMP"
+rm -f "$VENDOR_TMP" "$FULL_TMP"
 exit "$CODE"

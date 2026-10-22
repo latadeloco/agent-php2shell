@@ -45,9 +45,23 @@ Guarda los informes en local y no los publiques. No pegues salidas con `sudo` en
 - Los wrappers escriben únicamente en `~/.local/state/php2shell-scans/`.
 - Los scripts descargados se verifican por commit o SHA-256 antes de usarse.
 
+## Módulo de defensa
+
+Las reglas de defensa son opcionales y no forman parte del flujo de detección:
+
+- No se instalan por defecto: exigen `--install`.
+- Se descargan con commit fijado y SHA-256 por fichero; si no coincide, fallan cerrado.
+- El perfil por defecto es `alert`: registra pero no bloquea. `block` exige pedirlo de forma explícita.
+- Solo escriben en el destino indicado (por defecto, dentro de `~/.local/share/php2shell-agent/`). Nunca en `/etc` ni con `sudo`.
+- No incluyen PoC ni exploits; son firmas de detección.
+- Pueden generar falsos positivos. La regla de *chunked multipart* queda excluida salvo con `--include-aggressive`.
+
+La auditoría de sesión es de solo lectura y se ejecuta dentro del triaje. Si no puede leer sesiones o logs, lo indica y no altera el veredicto ni el código de salida.
+
 ## Limitaciones
 
 - `X-Powered-By` puede faltar o ser falseado.
+- Un `NO SIGNAL` en las reglas de defensa no significa que no haya habido intentos; dependen de que existan logs.
 - `NO SIGNAL` no significa "seguro".
 - La variante de fuga de memoria deja pocos rastros en disco.
 - Actualizar PHP no deshace un compromiso anterior.

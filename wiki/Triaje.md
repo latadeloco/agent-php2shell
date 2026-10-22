@@ -57,6 +57,23 @@ El agente nunca ejecuta `sudo` por su cuenta.
 
 En Windows no existe `sudo` ni los registros habituales de PHP en `/var/log`. El triaje funcionará, pero verá menos información.
 
+## Auditoría de sesión
+
+Además del triaje, el wrapper ejecuta una auditoría de sesión de solo lectura que busca:
+
+- Código PHP dentro de ficheros de sesión.
+- Objetos serializados en sesiones.
+- Fallos de destrucción de sesión en los logs.
+- Referencias a `PHP_SESSION_UPLOAD_PROGRESS`.
+
+Si no puede leer esos datos, lo indica y el triaje continúa con normalidad. No cambia el veredicto ni el código de salida.
+
+Puede ejecutarla aparte:
+
+```bash
+~/.local/share/php2shell-agent/tools/php2shell-session-audit.sh /ruta
+```
+
 ## Cómo interpretar el resultado
 
 | Resultado | Qué significa | Qué hacer |

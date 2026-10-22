@@ -12,6 +12,9 @@ Este documento es el contrato de comandos del agente. Los wrappers son iguales p
 | `scan --dry-run` | Revisar el comando | `php2shell-scan.sh --dry-run -u <URL>` | No | No | ask |
 | `triage` | Triaje de solo lectura, resumen | `php2shell-triage.sh --summary <ruta>` | Sí (TXT) | No | ask |
 | `triage --full` | Triaje con todo el detalle | `php2shell-triage.sh <ruta>` | Sí (TXT) | No | ask |
+| `rules` | Reglas de defensa, perfil alerta | `php2shell-rules.sh --install --profile alert` | Sí (reglas) | Sí (descarga) | ask |
+| `rules --dry-run` | Revisar la descarga sin escribir | `php2shell-rules.sh --dry-run` | No | No | ask |
+| `session-audit` | Señales de sesión de solo lectura | `php2shell-session-audit.sh [ruta]` | No | No | ask |
 | `curl` | Leer cabeceras | `curl -sS -D - -o /dev/null --max-time 20 ...` | No | Sí | allow |
 | `php -v` | Versión local | `php -v` | No | No | allow |
 | `date` | Nombre del informe | `date -u +%Y%m%dT%H%M%SZ` | No | No | allow |
@@ -32,6 +35,8 @@ Por defecto el agente responde en **10–12 líneas**:
 
 Los modos `preflight --check` y `triage` sin `--summary` quedan para cuando se pide detalle.
 
+El módulo `rules` es opcional y no interviene en el flujo normal: solo se ofrece tras un `VULNERABLE` o si se pide. El perfil por defecto es `alert`; `block` requiere pedirlo y avisar de los falsos positivos. La auditoría de sesión se ejecuta dentro de `triage` y nunca cambia su veredicto.
+
 ## Permisos de opencode
 
 ```yaml
@@ -43,6 +48,8 @@ shell:
   "<TOOLS_DIR>/preflight.sh*": allow
   "<TOOLS_DIR>/php2shell-scan.sh*": ask
   "<TOOLS_DIR>/php2shell-triage.sh*": ask
+  "<TOOLS_DIR>/php2shell-rules.sh*": ask
+  "<TOOLS_DIR>/php2shell-session-audit.sh*": ask
   "curl -sS -D - -o /dev/null --max-time *": allow
   "php -v": allow
   "date -u +%Y%m%dT%H%M%SZ": allow

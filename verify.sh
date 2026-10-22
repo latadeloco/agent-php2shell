@@ -29,6 +29,8 @@ for test in "$REPO_DIR/tests/render-test.sh" \
             "$REPO_DIR/tests/preflight-test.sh" \
             "$REPO_DIR/tests/wrapper-test.sh" \
             "$REPO_DIR/tests/triage-test.sh" \
+            "$REPO_DIR/tests/rules-test.sh" \
+            "$REPO_DIR/tests/session-audit-test.sh" \
             "$REPO_DIR/tests/prompt-budget-test.sh" \
             "$REPO_DIR/tests/wiki-test.sh"; do
   if [[ -f "$test" ]]; then

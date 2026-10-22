@@ -21,6 +21,7 @@ for phrase in \
   "--i-have-permission" \
   "preflight.sh --brief" \
   "php2shell-triage.sh --summary" \
+  "php2shell-rules.sh --install --profile alert" \
   "NO SIGNAL" \
   "Assetnote" \
   "Sairahcaz" \

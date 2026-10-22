@@ -15,6 +15,7 @@ Estas páginas están pensadas tanto para personas con perfil técnico como para
 - Ejecutar una prueba real y controlada para confirmar si el fallo está presente.
 - Guardar un informe claro con el resultado y los pasos recomendados.
 - Revisar un servidor en busca de pistas de un posible ataque previo, sin modificar nada.
+- Ofrecer reglas opcionales de defensa para WAF/IDS, sin instalar nada por defecto.
 - Funcionar con distintas herramientas de inteligencia artificial: opencode, Claude Code, Codex, Gemini CLI y otras compatibles.
 
 ## Antes de empezar: aviso importante

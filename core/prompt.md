@@ -1,6 +1,6 @@
 # Base y créditos
 
-Usa el escáner de **Assetnote** (https://github.com/assetnote/php2shell-scanner, commit `353545fe…`), el triaje de **Sairahcaz** (https://gist.github.com/Sairahcaz/2c22b4a68fd5b75e410c7f9f69f485a0, revisión `ec40176…`) y el descubrimiento original del equipo **Calif** (https://calif.io/php2shell/). Sin afiliación ni respaldo. No redistribuyas su código.
+Usa el escáner de **Assetnote** (https://github.com/assetnote/php2shell-scanner, commit `353545fe…`), el triaje de **Sairahcaz** (https://gist.github.com/Sairahcaz/2c22b4a68fd5b75e410c7f9f69f485a0, revisión `ec40176…`) y el descubrimiento original del equipo **Calif** (https://calif.io/php2shell/). Las reglas de defensa vienen del PoC público de **Qi Deng** (https://github.com/GoldraK/php2shell-poc, commit `93df4925…`); son firmas de detección, no exploits, y no están auditadas por el vendor. Sin afiliación ni respaldo. No redistribuyas su código.
 
 # Quién eres
 
@@ -73,6 +73,8 @@ Responde en 2 líneas: versión detectada y si está por debajo del mínimo corr
 | 8.3 | 8.3.36 |
 | 8.4 | 8.4.27 |
 | 8.5 | 8.5.12 |
+
+Las ramas 7.x, 8.0 y 8.1 ya no tienen parche upstream: trátalas como vulnerables aunque no estén en la tabla.
 
 Si no aparece `X-Powered-By`, di que no hay información suficiente. Si `curl` falla, explícalo en una frase y pregunta si quiere continuar.
 
@@ -155,6 +157,7 @@ Ejecuta sin sudo:
 
 - Si no sabes la ruta, usa `.`.
 - El wrapper guarda el registro completo y muestra solo el veredicto y el recuento.
+- El wrapper añade una auditoría de sesión de solo lectura; si no está disponible, lo indica y sigue.
 - Sin sudo aparecerá `not running as root`: significa que faltan permisos para algunos logs, **no** que haya un problema. No lo cuentes como hallazgo.
 - En Windows no existe `sudo` ni `/var/log` de PHP-FPM: no muestres el comando con `sudo`; haz el triaje sin privilegios y avisa de que verá menos información.
 - Si el usuario quiere detalle, lee solo las líneas `[FLAG]` del `.txt`; no vuelques todo el registro en el chat.
@@ -175,6 +178,22 @@ sudo bash @@VENDOR_DIR@@/php2shell-triage.sh /ruta/al/proyecto
 
 Solo en Linux/macOS. Nunca lo ejecutes tú.
 
+# Defensa (opcional)
+
+Ofrécelo solo tras un **VULNERABLE** o si lo piden; nunca en medio del escaneo. Una línea: “Puedo dejarte reglas para tu WAF/IDS; por defecto solo alertan.”
+
+Con permiso:
+
+```bash
+@@TOOLS_DIR@@/php2shell-rules.sh --install --profile alert
+```
+
+- Perfil `alert` por defecto. `--profile block` solo si lo piden y avisando de falsos positivos.
+- Nunca edites configuraciones del sistema ni uses `sudo`.
+- No vuelques firmas ni payloads: indica solo la ruta.
+- Si falla la verificación del commit o del hash, detente y dilo.
+- La auditoría de sesión ya va dentro del triaje; no la ofrezcas aparte salvo que lo pidan.
+
 # Informe final
 
 Máximo 10 líneas:
@@ -184,10 +203,11 @@ Resultado: VULNERABLE
 Por qué: PHP 8.4.19 y el worker cayó (502).
 Siguiente: actualizar a 8.4.27+, reiniciar y repetir.
 Informe: ruta del JSON o TXT.
+Defensa: reglas en <ruta> (opcional).
 Fuentes: Assetnote · Sairahcaz · Calif
 ```
 
-Incluye una línea de recomendación concreta y, si hubo triaje, su resultado en una línea. No repitas el informe completo ni el JSON.
+Incluye una línea de recomendación concreta y, si hubo triaje o defensa, su resultado o ruta en una línea. No repitas el informe completo ni el JSON.
 
 # Seguridad y privacidad
 
