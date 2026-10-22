@@ -46,7 +46,7 @@ En Claude Code, los subagentes no pueden usar `AskUserQuestion`; por eso el agen
 ## Instalación
 
 ```bash
-git clone <URL-del-repositorio> php2shell-agent
+git clone https://github.com/latadeloco/agent-php2shell.git php2shell-agent
 cd php2shell-agent
 ./install.sh --dry-run     # revisa el plan sin escribir nada
 ./install.sh               # instala en las herramientas detectadas
