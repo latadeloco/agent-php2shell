@@ -29,7 +29,7 @@ Versiones que corrigen el fallo:
 |---|---|---|
 | opencode | `~/.config/opencode/agents/php2shell.md` | Tab o `@php2shell` |
 | Claude Code | `~/.claude/agents/php2shell.md` | subagente `php2shell` |
-| Codex CLI | `~/.codex/prompts/php2shell.md` | `/php2shell` |
+| Codex CLI | `~/.codex/agents/php2shell.toml` | subagente `php2shell` |
 | Gemini CLI | `~/.gemini/commands/php2shell.toml` | `/php2shell` |
 | Genérico | `AGENTS.md` del proyecto | según la herramienta |
 
@@ -38,7 +38,7 @@ En Claude Code, los subagentes no pueden usar `AskUserQuestion`; por eso el agen
 ## Requisitos
 
 - Linux, macOS o WSL.
-- `bash`, `git`, `curl`, `sha256sum`.
+- `bash`, `git`, `curl`, `sha256sum` (Linux) o `shasum` (macOS).
 - [`uv`](https://docs.astral.sh/uv/) para ejecutar el scanner y sus dependencias.
 - Opcional: `php` para revisar proyectos locales.
 - Opcional: `opencode`, `claude`, `codex` o `gemini` según el destino.
@@ -64,7 +64,7 @@ Opciones:
 
 - `--target auto` detecta `opencode`, `claude`, `codex` y `gemini`. Si no encuentra ninguna, instala el bloque genérico.
 - `--project` instala en el proyecto actual (`.opencode/`, `.claude/`, `.gemini/` o `AGENTS.md`).
-- `--model` es opcional. Sin él, el agente hereda el modelo configurado en cada herramienta.
+- `--model` es opcional. Sin él, el agente hereda el modelo configurado en cada herramienta. Se aplica a opencode, Claude Code y Codex; Gemini usa el modelo configurado en su CLI.
 - `--dry-run` muestra el plan y no escribe.
 - `--force` sobrescribe sin backup.
 

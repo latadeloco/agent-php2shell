@@ -13,7 +13,8 @@ Este documento es el contrato de comandos del agente. Los wrappers son iguales p
 | `curl` | Leer cabeceras | `curl -sS -D - -o /dev/null --max-time 20 ...` | No | Sí | allow |
 | `php -v` | Versión local | `php -v` | No | No | allow |
 | `date` | Nombre del informe | `date -u +%Y%m%dT%H%M%SZ` | No | No | allow |
-| `sha256sum` | Verificar scripts | `sha256sum <DATA_DIR>/*` | No | No | allow |
+| `sha256sum` | Verificar scripts (Linux) | `sha256sum <DATA_DIR>/*` | No | No | allow |
+| `shasum` | Verificar scripts (macOS) | `shasum -a 256 <DATA_DIR>/*` | No | No | allow |
 | `sudo` | Triaje completo | `sudo bash <VENDOR_DIR>/php2shell-triage.sh <ruta>` | Sí | No | **manual, nunca por el agente** |
 
 ## Permisos de opencode
@@ -31,6 +32,7 @@ shell:
   "php -v": allow
   "date -u +%Y%m%dT%H%M%SZ": allow
   "sha256sum <DATA_DIR>/*": allow
+  "shasum -a 256 <DATA_DIR>/*": allow
 ```
 
 ## Permisos de Claude Code
@@ -41,6 +43,22 @@ permissionMode: default
 ```
 
 Sin `Write`, sin `Edit` y sin `WebFetch`. Las confirmaciones se piden en texto porque los subagentes no pueden usar `AskUserQuestion`.
+
+## Codex CLI
+
+Archivo TOML en `~/.codex/agents/php2shell.toml` (global) o `.codex/agents/php2shell.toml` (proyecto).
+
+```toml
+name = "php2shell"
+description = "..."
+developer_instructions = "..."
+```
+
+Hereda el modelo, el sandbox y las aprobaciones de Codex. Si se pasa `--model`, el instalador añade `model = "..."` al TOML. El agente se invoca pidiendo el subagente `php2shell` por su nombre.
+
+## Gemini CLI
+
+Archivo `~/.gemini/commands/php2shell.toml` (global) o `.gemini/commands/php2shell.toml` (proyecto). Es un comando/prompt; Gemini confirma la ejecución de shell. `--model` no se aplica a este target.
 
 ## Códigos de salida
 

@@ -75,7 +75,7 @@ trap 'rm -rf "$TMP"' EXIT
 export MODEL_LINE=""
 for adapter in "$REPO_DIR/adapters/opencode/php2shell.md" \
                "$REPO_DIR/adapters/claude-code/php2shell.md" \
-               "$REPO_DIR/adapters/codex/php2shell.md" \
+               "$REPO_DIR/adapters/codex/php2shell.toml" \
                "$REPO_DIR/adapters/generic/AGENTS.md"; do
   name="$(basename "$(dirname "$adapter")")"
   render_adapter "$REPO_DIR/core/prompt.md" "$adapter" "$TMP/$name"

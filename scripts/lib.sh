@@ -7,6 +7,14 @@ PHP2SHELL_TRIAGE_URL="${PHP2SHELL_TRIAGE_URL:-https://gist.githubusercontent.com
 PHP2SHELL_TRIAGE_REV="${PHP2SHELL_TRIAGE_REV:-ec40176f383156c29a8fa3f60d4a88c82cb683a8}"
 PHP2SHELL_TRIAGE_SHA256="${PHP2SHELL_TRIAGE_SHA256:-355a12feb009bc9a2071155c56eec38a67b0c3b9bfdc30014e36a198418b672d}"
 
+if command -v sha256sum >/dev/null 2>&1; then
+  HASH_TOOL=(sha256sum)
+elif command -v shasum >/dev/null 2>&1; then
+  HASH_TOOL=(shasum -a 256)
+else
+  HASH_TOOL=()
+fi
+
 php2shell_init_paths() {
   DATA_DIR="${PHP2SHELL_DATA_DIR:-${XDG_DATA_HOME:-$HOME/.local/share}/php2shell-agent}"
   STATE_DIR="${PHP2SHELL_STATE_DIR:-${XDG_STATE_HOME:-$HOME/.local/state}/php2shell-scans}"
@@ -53,7 +61,10 @@ require_cmd() {
 }
 
 sha256_of() {
-  sha256sum "$1" | awk '{print $1}'
+  if [[ ${#HASH_TOOL[@]} -eq 0 ]]; then
+    return 2
+  fi
+  "${HASH_TOOL[@]}" "$1" | awk '{print $1}'
 }
 
 confirm() {
@@ -82,13 +93,15 @@ render_template() {
   local src="$1"
   local dst="$2"
   local model_line="${MODEL_LINE:-}"
+  local model_toml_line="${MODEL_TOML_LINE:-}"
   awk \
     -v data="$DATA_DIR" \
     -v tools="$TOOLS_DIR" \
     -v scanner="$SCANNER_DIR" \
     -v state="$STATE_DIR" \
     -v vendor="$VENDOR_DIR" \
-    -v model="$model_line" '
+    -v model="$model_line" \
+    -v model_toml="$model_toml_line" '
     function repl(s, from, to,    out, i) {
       out = ""
       while ((i = index(s, from)) > 0) {
@@ -104,6 +117,7 @@ render_template() {
       $0 = repl($0, "@@STATE_DIR@@", state)
       $0 = repl($0, "@@VENDOR_DIR@@", vendor)
       $0 = repl($0, "@@MODEL_LINE@@", model)
+      $0 = repl($0, "@@MODEL_TOML_LINE@@", model_toml)
       print
     }
   ' "$src" > "$dst"

@@ -92,9 +92,9 @@ dest_for() {
       ;;
     codex)
       if [[ "$PROJECT" == "1" ]]; then
-        printf '%s/AGENTS.md' "$PWD"
+        printf '%s/.codex/agents/php2shell.toml' "$PWD"
       else
-        printf '%s/.codex/prompts/php2shell.md' "$HOME"
+        printf '%s/.codex/agents/php2shell.toml' "$HOME"
       fi
       ;;
     gemini)
@@ -157,12 +157,8 @@ fi
 for t in "${TARGETS[@]}"; do
   dest="$(dest_for "$t")"
   case "$t" in
-    codex|generic)
-      if [[ "$PROJECT" == "1" || "$t" == "generic" ]]; then
-        remove_agents_block "$dest"
-      else
-        remove_file "$dest"
-      fi
+    generic)
+      remove_agents_block "$dest"
       ;;
     *)
       remove_file "$dest"

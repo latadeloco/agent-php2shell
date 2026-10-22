@@ -1,0 +1,6 @@
+name = "php2shell"
+description = "Comprueba php2shell (CVE-2026-109618/109619) en webs y proyectos PHP, con preflight, permiso explícito y triaje de solo lectura."
+@@MODEL_TOML_LINE@@
+developer_instructions = '''
+@@CORE@@
+'''

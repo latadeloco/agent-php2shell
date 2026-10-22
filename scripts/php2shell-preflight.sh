@@ -39,7 +39,7 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-REQUIRED=(bash git curl sha256sum uv)
+REQUIRED=(bash git curl uv)
 OPTIONAL=(php opencode claude codex gemini)
 STATUS=0
 INTEGRITY=0
@@ -79,6 +79,20 @@ check_required_tools() {
       add_note "Falta la herramienta obligatoria $name"
     fi
   done
+}
+
+check_hash_tool() {
+  if [[ ${#HASH_TOOL[@]} -gt 0 ]]; then
+    local path
+    path="$(command -v "${HASH_TOOL[0]}" 2>/dev/null || true)"
+    record_tool "${HASH_TOOL[0]}" "$path" "disponible" true
+    [[ "$JSON" == "1" ]] || ok "${HASH_TOOL[0]}: disponible"
+  else
+    record_tool "sha256sum/shasum" "" "" true
+    [[ "$JSON" == "1" ]] || err "Falta 'sha256sum' (Linux) o 'shasum' (macOS)."
+    STATUS=1
+    add_note "Falta sha256sum o shasum"
+  fi
 }
 
 check_optional_tools() {
@@ -253,6 +267,7 @@ run_smoke() {
 }
 
 check_required_tools
+check_hash_tool
 check_optional_tools
 
 if [[ "$MODE" != "bootstrap" ]]; then

@@ -125,9 +125,9 @@ dest_for() {
       ;;
     codex)
       if [[ "$PROJECT" == "1" ]]; then
-        printf '%s/AGENTS.md' "$PWD"
+        printf '%s/.codex/agents/php2shell.toml' "$PWD"
       else
-        printf '%s/.codex/prompts/php2shell.md' "$HOME"
+        printf '%s/.codex/agents/php2shell.toml' "$HOME"
       fi
       ;;
     gemini)
@@ -247,14 +247,19 @@ install_tools() {
 
 render_targets() {
   local t dest
-  local -A done_dests=()
+  local -a done_dests=()
+  local d already
   for t in "${TARGETS[@]}"; do
     dest="$(dest_for "$t")"
-    if [[ -n "${done_dests[$dest]:-}" ]]; then
+    already=0
+    for d in "${done_dests[@]}"; do
+      [[ "$d" == "$dest" ]] && already=1
+    done
+    if [[ "$already" == "1" ]]; then
       info "  $t -> $dest (ya cubierto por otro target)"
       continue
     fi
-    done_dests[$dest]=1
+    done_dests+=("$dest")
     case "$t" in
       opencode)
         install_adapter "$t" "$dest" "$REPO_DIR/adapters/opencode/php2shell.md"
@@ -266,13 +271,12 @@ render_targets() {
         install_adapter "$t" "$dest" "$REPO_DIR/adapters/claude-code/php2shell.md"
         ;;
       codex)
-        if [[ "$PROJECT" == "1" ]]; then
-          install_agents_block "$t" "$dest" "$REPO_DIR/adapters/generic/AGENTS.md"
-        else
-          install_adapter "$t" "$dest" "$REPO_DIR/adapters/codex/php2shell.md"
-        fi
+        install_adapter "$t" "$dest" "$REPO_DIR/adapters/codex/php2shell.toml"
         ;;
       gemini)
+        if [[ -n "$MODEL" ]]; then
+          warn "Gemini usa el modelo configurado en la CLI; --model no se aplica a este target."
+        fi
         install_adapter "$t" "$dest" "$REPO_DIR/adapters/gemini/php2shell.toml"
         ;;
       generic)
@@ -285,9 +289,14 @@ render_targets() {
 resolve_targets
 
 if [[ -n "$MODEL" ]]; then
+  if [[ "$MODEL" == *'"'* || "$MODEL" == *$'\n'* ]]; then
+    die "El valor de --model no puede contener comillas ni saltos de línea."
+  fi
   export MODEL_LINE="model: $MODEL"
+  export MODEL_TOML_LINE="model = \"$MODEL\""
 else
   export MODEL_LINE=""
+  export MODEL_TOML_LINE=""
 fi
 
 print_plan
@@ -326,7 +335,7 @@ for t in "${TARGETS[@]}"; do
   case "$t" in
     opencode) info "  opencode:  selecciona 'php2shell' con Tab o escribe @php2shell" ;;
     claude-code) info "  Claude Code: usa el subagente php2shell desde /agents" ;;
-    codex) info "  Codex:     invoca /php2shell" ;;
+    codex) info "  Codex:     pide al subagente php2shell por su nombre" ;;
     gemini) info "  Gemini:    invoca /php2shell" ;;
     generic) info "  Genérico:  el bloque está en $(dest_for "$t")" ;;
   esac

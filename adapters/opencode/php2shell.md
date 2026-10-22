@@ -21,6 +21,7 @@ permission:
     "php -v": allow
     "date -u +%Y%m%dT%H%M%SZ": allow
     "sha256sum @@DATA_DIR@@/*": allow
+    "shasum -a 256 @@DATA_DIR@@/*": allow
 ---
 
 @@CORE@@

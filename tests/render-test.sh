@@ -13,6 +13,7 @@ export PHP2SHELL_DATA_DIR="$TMP/data"
 export PHP2SHELL_STATE_DIR="$TMP/state"
 php2shell_init_paths
 export MODEL_LINE="model: test/model"
+export MODEL_TOML_LINE='model = "test/model"'
 
 FAIL=0
 
@@ -43,7 +44,7 @@ render_and_check() {
 
 render_and_check "opencode" "$REPO_DIR/adapters/opencode/php2shell.md"
 render_and_check "claude-code" "$REPO_DIR/adapters/claude-code/php2shell.md"
-render_and_check "codex" "$REPO_DIR/adapters/codex/php2shell.md"
+render_and_check "codex" "$REPO_DIR/adapters/codex/php2shell.toml"
 render_and_check "generic" "$REPO_DIR/adapters/generic/AGENTS.md"
 
 # Gemini usa TOML; el mismo renderizador debe sustituir los placeholders.
@@ -66,6 +67,9 @@ grep -q 'tools: Bash, Read, Glob, Grep' "$TMP/claude-code.md" || { echo "[FAIL] 
 grep -q 'permissionMode: default' "$TMP/claude-code.md" || { echo "[FAIL] claude sin permissionMode" >&2; FAIL=1; }
 grep -q 'model: test/model' "$TMP/opencode.md" || { echo "[FAIL] opencode sin modelo" >&2; FAIL=1; }
 grep -q 'php2shell-scan.sh' "$TMP/opencode.md" || { echo "[FAIL] opencode sin wrapper de escaneo" >&2; FAIL=1; }
+grep -q '^name = "php2shell"' "$TMP/codex.md" || { echo "[FAIL] codex sin name TOML" >&2; FAIL=1; }
+grep -q '^developer_instructions = ' "$TMP/codex.md" || { echo "[FAIL] codex sin developer_instructions" >&2; FAIL=1; }
+grep -q '^model = "test/model"' "$TMP/codex.md" || { echo "[FAIL] codex sin modelo TOML" >&2; FAIL=1; }
 
 if grep -q '/home/jesus' "$REPO_DIR/core" "$REPO_DIR/adapters" "$REPO_DIR/scripts" 2>/dev/null; then
   echo "[FAIL] El repositorio contiene rutas personales" >&2
