@@ -234,13 +234,15 @@ install_triage() {
 }
 
 install_tools() {
-  mkdir -p "$TOOLS_DIR"
-  install -m 0755 "$REPO_DIR/scripts/php2shell-preflight.sh" "$TOOLS_DIR/preflight.sh"
-  install -m 0755 "$REPO_DIR/scripts/php2shell-scan.sh" "$TOOLS_DIR/php2shell-scan.sh"
-  install -m 0755 "$REPO_DIR/scripts/php2shell-triage.sh" "$TOOLS_DIR/php2shell-triage.sh"
-  install -m 0644 "$REPO_DIR/scripts/lib.sh" "$TOOLS_DIR/lib.sh"
-  install -m 0644 "$REPO_DIR/SOURCES.md" "$DATA_DIR/SOURCES.md"
-  install -m 0644 "$REPO_DIR/LICENSE" "$DATA_DIR/LICENSE"
+  mkdir -p "$TOOLS_DIR" "$DATA_DIR"
+  cp "$REPO_DIR/scripts/php2shell-preflight.sh" "$TOOLS_DIR/preflight.sh"
+  cp "$REPO_DIR/scripts/php2shell-scan.sh" "$TOOLS_DIR/php2shell-scan.sh"
+  cp "$REPO_DIR/scripts/php2shell-triage.sh" "$TOOLS_DIR/php2shell-triage.sh"
+  cp "$REPO_DIR/scripts/lib.sh" "$TOOLS_DIR/lib.sh"
+  cp "$REPO_DIR/SOURCES.md" "$DATA_DIR/SOURCES.md"
+  cp "$REPO_DIR/LICENSE" "$DATA_DIR/LICENSE"
+  chmod 0755 "$TOOLS_DIR/preflight.sh" "$TOOLS_DIR/php2shell-scan.sh" "$TOOLS_DIR/php2shell-triage.sh"
+  chmod 0644 "$TOOLS_DIR/lib.sh" "$DATA_DIR/SOURCES.md" "$DATA_DIR/LICENSE"
   mkdir -p "$STATE_DIR"
   ok "wrappers instalados en $TOOLS_DIR"
 }

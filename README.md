@@ -4,7 +4,7 @@ Agente de seguridad para comprobar si una web o un proyecto PHP es vulnerable a 
 
 Usa el scanner oficial de **Assetnote** y un script de triaje de solo lectura de **Sairahcaz**. Incluye revisión previa de herramientas y permisos, avisos de impacto y confirmación explícita antes de lanzar pruebas activas. No redistribuye el código de terceros: lo descarga con versión fijada y verifica su hash.
 
-> **Aviso:** la prueba completa es activa. Envía hasta unos 29 MB, puede tumbar PHP-FPM/mod_php unos segundos y solo debe ejecutarse en servidores propios o con autorización por escrito. El agente exige `--i-have-permission` y ofrece un `--dry-run` para revisar el comando antes.
+> **Aviso importante:** la prueba completa es activa y **puede tumbar el servidor**. Envía hasta unos 29 MB y puede dejar PHP-FPM/mod_php caído unos segundos. Úsala solo en servidores propios o con autorización por escrito, preferiblemente en staging o en una ventana de mantenimiento. El agente exige `--i-have-permission` y ofrece un `--dry-run` para revisar el comando antes.
 
 ## Qué hace
 
@@ -37,11 +37,13 @@ En Claude Code, los subagentes no pueden usar `AskUserQuestion`; por eso el agen
 
 ## Requisitos
 
-- Linux, macOS o WSL.
-- `bash`, `git`, `curl`, `sha256sum` (Linux) o `shasum` (macOS).
+- Linux, macOS, WSL o **Windows nativo con Git for Windows (Git Bash)**.
+- `bash`, `git`, `curl`, `sha256sum` (Linux/Windows) o `shasum` (macOS).
 - [`uv`](https://docs.astral.sh/uv/) para ejecutar el scanner y sus dependencias.
 - Opcional: `php` para revisar proyectos locales.
 - Opcional: `opencode`, `claude`, `codex` o `gemini` según el destino.
+
+En Windows nativo, **Git for Windows es obligatorio**: Claude Code usa Git Bash para ejecutar los wrappers. Sin Git Bash, Claude Code usa PowerShell y este agente no puede ejecutar los scripts `.sh`.
 
 ## Instalación
 
@@ -70,6 +72,8 @@ Opciones:
 
 ### Instalar desde Claude Code
 
+> **Cuidado:** el agente ejecuta una prueba activa que puede tumbar PHP-FPM/mod_php. No lo instales ni lo lances contra producción sin autorización y sin una ventana de mantenimiento.
+
 Si le pides a Claude Code que instale el agente, dile que ejecute:
 
 ```bash
@@ -78,11 +82,75 @@ cd agent-php2shell
 ./install.sh --target claude-code --yes
 ```
 
+O pega directamente este prompt en Claude Code:
+
+```text
+Instala php2shell-agent desde https://github.com/latadeloco/agent-php2shell:
+clona el repo, ejecuta ./install.sh --target claude-code --yes y reinicia Claude Code.
+Aviso: hace pruebas activas que pueden tumbar el servidor; solo debe usarse con autorización.
+```
+
 Claude pedirá permiso para ejecutar los comandos. Al terminar, **reinicia Claude Code** si la carpeta `~/.claude/agents/` no existía antes, para que detecte el subagente.
 
 Si `uv` no está instalado, el instalador se detendrá y mostrará el comando para instalarlo.
 
 El instalador ejecuta un preflight, muestra qué va a crear y pide confirmación antes de tocar nada.
+
+### Windows
+
+#### Opción A: Claude Code nativo con Git Bash (recomendada)
+
+1. Instala [Git for Windows](https://git-scm.com/download/win). Incluye Git Bash.
+2. Instala `uv` desde PowerShell:
+
+   ```powershell
+   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+   ```
+
+   Cierra y vuelve a abrir la terminal. Comprueba con `uv --version`.
+3. Abre **Git Bash** (no PowerShell) y ejecuta:
+
+   ```bash
+   git clone https://github.com/latadeloco/agent-php2shell.git
+   cd agent-php2shell
+   ./install.sh --target claude-code --yes
+   ```
+
+4. Reinicia Claude Code. El agente queda en `C:\Users\<tu-usuario>\.claude\agents\php2shell.md`.
+
+Si Claude Code no encuentra Git Bash, añade esto a tu `settings.json`:
+
+```json
+{
+  "env": {
+    "CLAUDE_CODE_GIT_BASH_PATH": "C:\\Program Files\\Git\\bin\\bash.exe"
+  }
+}
+```
+
+> **Aviso:** la prueba activa puede tumbar PHP-FPM/mod_php. En Windows, úsala solo contra servidores de pruebas o con autorización.
+
+#### Opción B: WSL2
+
+Si prefieres Linux, instala WSL2 y ejecuta Claude Code **dentro de WSL**:
+
+```powershell
+wsl --install -d Ubuntu
+```
+
+Después, en la terminal de Ubuntu:
+
+```bash
+sudo apt update && sudo apt install -y git curl
+curl -LsSf https://astral.sh/uv/install.sh | sh
+git clone https://github.com/latadeloco/agent-php2shell.git
+cd agent-php2shell
+./install.sh --target claude-code --yes
+```
+
+El agente se instala en el `~/.claude/agents/` de WSL. Claude Code debe ejecutarse también dentro de WSL para verlo. Si Claude Code es nativo de Windows, usa la Opción A.
+
+Si Claude Code usa PowerShell sin Git Bash, este agente no puede ejecutar los wrappers `.sh`. En ese caso instala Git for Windows o usa WSL2.
 
 ## Uso
 

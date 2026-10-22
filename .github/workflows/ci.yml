@@ -39,3 +39,32 @@ jobs:
           bash tests/render-test.sh
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
+
+  windows:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Sintaxis
+        run: |
+          find . -name '*.sh' -print0 | xargs -0 -n1 bash -n
+
+      - name: Render y wrapper (Git Bash)
+        run: |
+          bash tests/render-test.sh
+          bash tests/wrapper-test.sh
+
+      - name: Instalación en HOME temporal
+        run: |
+          export HOME="$(mktemp -d)"
+          export XDG_DATA_HOME="$HOME/.local/share"
+          export XDG_STATE_HOME="$HOME/.local/state"
+          export XDG_CONFIG_HOME="$HOME/.config"
+          ./install.sh --target claude-code --yes
+          test -f "$HOME/.claude/agents/php2shell.md"
+          grep -q "Base y créditos" "$HOME/.claude/agents/php2shell.md"
