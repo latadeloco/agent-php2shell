@@ -98,7 +98,7 @@ check_optional_tools() {
       [[ "$JSON" == "1" ]] || ok "$name: ${version:-disponible}"
     else
       record_tool "$name" "" "" false
-      [[ "$JSON" == "1" ]] || info " $C_YELLOW[--]$C_RESET $name no encontrado (opcional)"
+      [[ "$JSON" == "1" ]] || info " ${C_YELLOW}[--]${C_RESET} $name no encontrado (opcional)"
     fi
   done
 }
