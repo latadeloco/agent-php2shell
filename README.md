@@ -68,6 +68,20 @@ Opciones:
 - `--dry-run` muestra el plan y no escribe.
 - `--force` sobrescribe sin backup.
 
+### Instalar desde Claude Code
+
+Si le pides a Claude Code que instale el agente, dile que ejecute:
+
+```bash
+git clone https://github.com/latadeloco/agent-php2shell.git
+cd agent-php2shell
+./install.sh --target claude-code --yes
+```
+
+Claude pedirá permiso para ejecutar los comandos. Al terminar, **reinicia Claude Code** si la carpeta `~/.claude/agents/` no existía antes, para que detecte el subagente.
+
+Si `uv` no está instalado, el instalador se detendrá y mostrará el comando para instalarlo.
+
 El instalador ejecuta un preflight, muestra qué va a crear y pide confirmación antes de tocar nada.
 
 ## Uso

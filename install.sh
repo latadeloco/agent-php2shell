@@ -301,6 +301,13 @@ fi
 
 print_plan
 
+if ! have_cmd uv; then
+  err "Falta 'uv', la herramienta que ejecuta el scanner."
+  info "Instálalo con: curl -LsSf https://astral.sh/uv/install.sh | sh"
+  info "Después vuelve a ejecutar ./install.sh --yes"
+  exit 1
+fi
+
 if ! "$REPO_DIR/scripts/php2shell-preflight.sh" --bootstrap; then
   die "Faltan dependencias obligatorias. No se ha instalado nada."
 fi
