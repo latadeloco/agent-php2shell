@@ -140,6 +140,7 @@ check_integrity() {
   check_file "wrapper de escaneo" "$TOOLS_DIR/php2shell-scan.sh"
   check_file "wrapper de triaje" "$TOOLS_DIR/php2shell-triage.sh"
   check_file "wrapper avanzado" "$TOOLS_DIR/php2shell-bt.sh"
+  check_file "auditoría de configuración" "$TOOLS_DIR/php2shell-session-config.sh"
   check_file "php2shellbt.py" "$VENDOR_DIR/php2shellbt.py"
   check_file "preflight" "$TOOLS_DIR/preflight.sh"
 
@@ -266,6 +267,8 @@ print_commands() {
   info "              Solo lectura del sistema. Escribe un informe .txt."
   info "  avanzado    $TOOLS_DIR/php2shell-bt.sh --dry-run ..."
   info "              Cadena de sesión. Exige --i-have-permission. Escribe JSON."
+  info "  config      $TOOLS_DIR/php2shell-session-config.sh --summary ..."
+  info "              CVE-2026-115560. Solo lectura; revisa configuración."
   info "  reglas      $TOOLS_DIR/php2shell-rules.sh --install --profile alert"
   info "              Reglas de defensa. Perfil alert por defecto."
   info "  sesión      $TOOLS_DIR/php2shell-session-audit.sh"

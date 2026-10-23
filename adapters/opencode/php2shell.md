@@ -18,6 +18,7 @@ permission:
     "@@TOOLS_DIR@@/php2shell-scan.sh*": ask
     "@@TOOLS_DIR@@/php2shell-triage.sh*": ask
     "@@TOOLS_DIR@@/php2shell-bt.sh*": ask
+    "@@TOOLS_DIR@@/php2shell-session-config.sh*": ask
     "@@TOOLS_DIR@@/php2shell-rules.sh*": ask
     "@@TOOLS_DIR@@/php2shell-session-audit.sh*": ask
     "curl -sS -D - -o /dev/null --max-time *": allow

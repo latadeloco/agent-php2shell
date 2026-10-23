@@ -248,13 +248,15 @@ install_tools() {
   cp "$REPO_DIR/scripts/php2shell-scan.sh" "$TOOLS_DIR/php2shell-scan.sh"
   cp "$REPO_DIR/scripts/php2shell-triage.sh" "$TOOLS_DIR/php2shell-triage.sh"
   cp "$REPO_DIR/scripts/php2shell-bt.sh" "$TOOLS_DIR/php2shell-bt.sh"
+  cp "$REPO_DIR/scripts/php2shell-session-config.sh" "$TOOLS_DIR/php2shell-session-config.sh"
   cp "$REPO_DIR/scripts/php2shell-rules.sh" "$TOOLS_DIR/php2shell-rules.sh"
   cp "$REPO_DIR/scripts/php2shell-session-audit.sh" "$TOOLS_DIR/php2shell-session-audit.sh"
   cp "$REPO_DIR/scripts/lib.sh" "$TOOLS_DIR/lib.sh"
   cp "$REPO_DIR/SOURCES.md" "$DATA_DIR/SOURCES.md"
   cp "$REPO_DIR/LICENSE" "$DATA_DIR/LICENSE"
   chmod 0755 "$TOOLS_DIR/preflight.sh" "$TOOLS_DIR/php2shell-scan.sh" "$TOOLS_DIR/php2shell-triage.sh" \
-    "$TOOLS_DIR/php2shell-bt.sh" "$TOOLS_DIR/php2shell-rules.sh" "$TOOLS_DIR/php2shell-session-audit.sh"
+    "$TOOLS_DIR/php2shell-bt.sh" "$TOOLS_DIR/php2shell-session-config.sh" \
+    "$TOOLS_DIR/php2shell-rules.sh" "$TOOLS_DIR/php2shell-session-audit.sh"
   chmod 0644 "$TOOLS_DIR/lib.sh" "$DATA_DIR/SOURCES.md" "$DATA_DIR/LICENSE"
   mkdir -p "$STATE_DIR"
   ok "wrappers instalados en $TOOLS_DIR"

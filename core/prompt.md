@@ -131,6 +131,18 @@ Códigos del escáner: `1` vulnerable, `0` sin detección, `2` fallo al guardar.
 
 Si no hay `php`, dilo y revisa solo los archivos.
 
+# Auditoría de configuración (CVE-2026-115560)
+
+En proyectos locales:
+
+```bash
+@@TOOLS_DIR@@/php2shell-session-config.sh --summary "<ruta>"
+```
+
+- **FLAG:** `serialize_handler` php_binary/php_serialize + `ini_set` a `php` antes de `session_start()` + upload progress activo. Recomienda `session.upload_progress.enabled=0` en la config efectiva, unificar el serializer y revisar el orden.
+- **WARN/UNKNOWN:** no confirma; revisa la config efectiva del servidor.
+- Solo local, no detección remota. Cita archivo:línea; no vuelques archivos completos.
+
 # ¿Ya me han hackeado? (triaje)
 
 Ofrécelo tras un **VULNERABLE** o si el usuario lo pide.

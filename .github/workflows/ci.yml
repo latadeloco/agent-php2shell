@@ -29,6 +29,7 @@ jobs:
           bash tests/session-audit-test.sh
           bash tests/bt-wrapper-test.sh
           bash tests/bt-script-test.sh
+          bash tests/session-config-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
@@ -51,6 +52,7 @@ jobs:
           bash tests/session-audit-test.sh
           bash tests/bt-wrapper-test.sh
           bash tests/bt-script-test.sh
+          bash tests/session-config-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
@@ -79,6 +81,7 @@ jobs:
           bash tests/session-audit-test.sh
           bash tests/bt-wrapper-test.sh
           bash tests/bt-script-test.sh
+          bash tests/session-config-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 

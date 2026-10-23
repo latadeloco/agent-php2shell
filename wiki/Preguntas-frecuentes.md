@@ -83,6 +83,12 @@ Es una comprobación opcional que revisa avisos de sesión, la confusión de `se
 
 Es más intrusiva: escribe ficheros de sesión y puede enviar un marcador PHP al servidor. Solo debe usarse con autorización y con las rutas exactas. Consulte [Cadena de sesión](Cadena-de-sesion).
 
+## ¿Qué es CVE-2026-115560?
+
+Es una vulnerabilidad distinta, publicada el 23 de octubre de 2026, que afecta a una configuración poco habitual de sesiones: `serialize_handler` php_binary/php_serialize, cambio a `php` con `ini_set()` antes de `session_start()` y upload progress activo.
+
+No está corregida por las versiones del 21 de octubre. La mitigación recomendada es `session.upload_progress.enabled=0` en la configuración efectiva del servidor. Consulte [CVE-2026-115560](CVE-2026-115560).
+
 ## ¿Puedo probar la web de un cliente?
 
 Solo si tiene autorización por escrito. Si no está seguro, no lo haga.

@@ -33,6 +33,7 @@ for test in "$REPO_DIR/tests/render-test.sh" \
             "$REPO_DIR/tests/session-audit-test.sh" \
             "$REPO_DIR/tests/bt-wrapper-test.sh" \
             "$REPO_DIR/tests/bt-script-test.sh" \
+            "$REPO_DIR/tests/session-config-test.sh" \
             "$REPO_DIR/tests/prompt-budget-test.sh" \
             "$REPO_DIR/tests/wiki-test.sh"; do
   if [[ -f "$test" ]]; then

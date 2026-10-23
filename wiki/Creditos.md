@@ -9,6 +9,7 @@ php2shell-agent se apoya en el trabajo de otras personas y equipos. Esta página
 | **Assetnote** | Escáner oficial de php2shell | https://github.com/assetnote/php2shell-scanner |
 | **Sairahcaz** | Script de triaje de solo lectura | https://gist.github.com/Sairahcaz/2c22b4a68fd5b75e410c7f9f69f485a0 |
 | **pentestershell (BTshell)** | Módulo de cadena de sesión y LFI | https://github.com/pentestershell/php2shellbt |
+| **Syhunt (Felipe Daragon)** | Guía de mitigación y plantillas para CVE-2026-115560 | https://github.com/syhunt/php2shell-protection |
 | **Equipo Calif** | Descubrimiento original de php2shell | https://calif.io/php2shell/ |
 | **Qi Deng (ikow) / GoldraK** | Reglas de defensa (Suricata, Sigma, ModSecurity, Lua) | https://github.com/GoldraK/php2shell-poc |
 
@@ -16,6 +17,7 @@ Fallos tratados:
 
 - CVE-2026-109618
 - CVE-2026-109619
+- CVE-2026-115560 (auditoría de configuración local; no detección remota)
 
 ## Versiones fijadas
 
@@ -35,13 +37,14 @@ El instalador verifica estas versiones antes de usarlas.
 - El repositorio de Assetnote no incluye un archivo de licencia en la revisión utilizada.
 - El gist de Sairahcaz no incluye licencia.
 - `php2shellbt` usa licencia MIT y se incluye vendorizado, con su licencia y los parches documentados.
+- La guía de Syhunt usa licencia MIT; se enlaza y no se vendoriza.
 - Por este motivo, este proyecto **no copia ni redistribuye** el scanner ni el gist. Solo los descarga al instalar y verifica su integridad.
 
 Consulte el archivo `SOURCES.md` del repositorio para más detalles.
 
 ## Afiliación
 
-No existe afiliación, patrocinio ni respaldo por parte de Assetnote, Sairahcaz, pentestershell, el equipo Calif ni Qi Deng.
+No existe afiliación, patrocinio ni respaldo por parte de Assetnote, Sairahcaz, pentestershell, Syhunt, el equipo Calif ni Qi Deng.
 
 Las reglas de defensa no están auditadas por el vendor. El repositorio de origen incluye PoC de explotación que este proyecto no descarga ni redistribuye.
 

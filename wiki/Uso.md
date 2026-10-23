@@ -105,9 +105,12 @@ Si el proyecto está en su ordenador:
 
 1. Indique la carpeta del proyecto.
 2. El agente leerá los archivos de configuración y ejecutará `php -v` si está disponible.
-3. Le dirá qué versión de PHP parece usar el proyecto.
-4. Le pedirá la dirección donde está funcionando, por ejemplo `http://localhost:8000`.
-5. Con esa dirección, seguirá el flujo normal.
+3. Ejecutará una auditoría de configuración para CVE-2026-115560, si el proyecto es PHP.
+4. Le dirá qué versión de PHP parece usar el proyecto.
+5. Le pedirá la dirección donde está funcionando, por ejemplo `http://localhost:8000`.
+6. Con esa dirección, seguirá el flujo normal.
+
+La auditoría de CVE-2026-115560 es de solo lectura y revisa la configuración de sesión. No es detección remota. Consulte [CVE-2026-115560](CVE-2026-115560).
 
 El agente no arranca la aplicación por su cuenta.
 

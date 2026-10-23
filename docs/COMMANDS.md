@@ -18,6 +18,7 @@ Este documento es el contrato de comandos del agente. Los wrappers son iguales p
 | `bt` | Cadena de sesión avanzada (solo `warn`) | `php2shell-bt.sh --i-have-permission -u <URL> --checks warn` | Sí (JSON) | Sí | ask |
 | `bt --advanced` | Handler mismatch + LFI (rutas explícitas) | `php2shell-bt.sh --i-have-permission --advanced -u <URL> --lfi ... --write-path ... --read-path ...` | Sí (JSON) | Sí | ask |
 | `bt --dry-run` | Revisar el comando sin ejecutar | `php2shell-bt.sh --dry-run -u <URL>` | No | No | ask |
+| `session-config` | Auditoría local de CVE-2026-115560 | `php2shell-session-config.sh --summary <ruta>` | No | No | ask |
 | `curl` | Leer cabeceras | `curl -sS -D - -o /dev/null --max-time 20 ...` | No | Sí | allow |
 | `php -v` | Versión local | `php -v` | No | No | allow |
 | `date` | Nombre del informe | `date -u +%Y%m%dT%H%M%SZ` | No | No | allow |
@@ -40,6 +41,8 @@ Los modos `preflight --check` y `triage` sin `--summary` quedan para cuando se p
 
 El módulo `rules` es opcional y no interviene en el flujo normal: solo se ofrece tras un `VULNERABLE` o si se pide. El perfil por defecto es `alert`; `block` requiere pedirlo y avisar de los falsos positivos. La auditoría de sesión se ejecuta dentro de `triage` y nunca cambia su veredicto.
 
+El módulo `session-config` es una auditoría local de solo lectura para CVE-2026-115560. Busca la combinación `serialize_handler` php_binary/php_serialize, `ini_set` a `php` antes de `session_start()` y upload progress activo. No es detección remota.
+
 El módulo `bt` es avanzado y opcional. Se ofrece tras un `VULNERABLE` o si se pide. Por defecto ejecuta solo `warn` (avisos de sesión). `--advanced` habilita `handler` y `lfi` y exige rutas explícitas. El check `lfi` escribe un fichero de sesión y prueba un marcador PHP: no es una prueba pasiva. Requiere `--i-have-permission` y una confirmación adicional.
 
 ## Permisos de opencode
@@ -54,6 +57,7 @@ shell:
   "<TOOLS_DIR>/php2shell-scan.sh*": ask
   "<TOOLS_DIR>/php2shell-triage.sh*": ask
   "<TOOLS_DIR>/php2shell-bt.sh*": ask
+  "<TOOLS_DIR>/php2shell-session-config.sh*": ask
   "<TOOLS_DIR>/php2shell-rules.sh*": ask
   "<TOOLS_DIR>/php2shell-session-audit.sh*": ask
   "curl -sS -D - -o /dev/null --max-time *": allow
@@ -104,7 +108,8 @@ Archivo `~/.gemini/commands/php2shell.toml` (global) o `.gemini/commands/php2she
 3. Confirmación del usuario
 4. `scan --i-have-permission`
 5. Informe
-6. [Opcional] `bt --dry-run` → confirmación avanzada → `bt --advanced`
-7. Oferta de triaje
-8. `triage --summary`
-9. [Opcional] `rules --install --profile alert`
+6. [Local] `session-config --summary`
+7. [Opcional] `bt --dry-run` → confirmación avanzada → `bt --advanced`
+8. Oferta de triaje
+9. `triage --summary`
+10. [Opcional] `rules --install --profile alert`

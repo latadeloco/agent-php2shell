@@ -39,6 +39,7 @@ La herramienta pide confirmación antes de ejecutar la prueba activa. Puede revi
 - [Resultados](Resultados)
 - [Seguridad y permisos](Seguridad)
 - [Cadena de sesión avanzada](Cadena-de-sesion)
+- [CVE-2026-115560](CVE-2026-115560)
 - [Revisión de un posible ataque previo (triaje)](Triaje)
 - [Problemas frecuentes](Problemas-frecuentes)
 - [Preguntas frecuentes](Preguntas-frecuentes)

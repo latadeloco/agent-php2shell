@@ -24,8 +24,9 @@ El contenido fuente está en [`wiki/`](wiki/) y se publica con:
 2. **Prueba rápida:** lee `X-Powered-By` y compara la versión de PHP con las versiones parcheadas.
 3. **Prueba activa:** ejecuta el scanner de Assetnote contra un único objetivo, con un hilo y timeout controlado.
 4. **Cadena de sesión avanzada (opcional):** comprueba avisos de sesión, handler mismatch y la cadena sesión + LFI con `php2shellbt`.
-5. **Triaje:** si el resultado es `VULNERABLE` o se solicita, busca señales de compromiso en el equipo (solo lectura).
-6. **Informe:** resumen en lenguaje claro, recomendaciones y anexo técnico.
+5. **Auditoría de configuración:** revisa localmente las condiciones de CVE-2026-115560 en proyectos PHP.
+6. **Triaje:** si el resultado es `VULNERABLE` o se solicita, busca señales de compromiso en el equipo (solo lectura).
+7. **Informe:** resumen en lenguaje claro, recomendaciones y anexo técnico.
 
 Versiones que corrigen el fallo:
 
@@ -239,6 +240,26 @@ El módulo `php2shellbt` es opcional y más intrusivo. Se ofrece tras un `VULNER
 
 El wrapper rechaza listas, exige un único objetivo, verifica TLS por defecto y no muestra payloads. El JSON se guarda con el resto de informes.
 
+### CVE-2026-115560 y configuración de sesión
+
+CVE-2026-115560 es una variante distinta, publicada el 23 de octubre de 2026 y **no corregida** por las versiones del 21 de octubre. Solo afecta a una configuración poco habitual:
+
+- `session.serialize_handler` configurado como `php_binary` o `php_serialize`.
+- La aplicación lo cambia a `php` con `ini_set()` **antes** de `session_start()`.
+- `session.upload_progress.enabled` sigue activo.
+
+Para proyectos locales, el agente ejecuta una auditoría de solo lectura:
+
+```bash
+~/.local/share/php2shell-agent/tools/php2shell-session-config.sh --summary /ruta/al/proyecto
+```
+
+Busca esas condiciones en `php.ini`, `.user.ini`, Docker, FPM, `.htaccess` y código PHP. Devuelve `FLAG`, `WARN`, `OK` o `UNKNOWN`.
+
+> **Importante:** no es detección remota. La configuración efectiva puede estar en el hosting, en variables de entorno o en un `php.ini` fuera del repositorio. La mitigación recomendada es `session.upload_progress.enabled=0` en la configuración efectiva del servidor, antes del parseo de la petición, y reiniciar los workers.
+
+La guía de mitigación y las plantillas Apache/PHP de referencia están en [syhunt/php2shell-protection](https://github.com/syhunt/php2shell-protection) (MIT). No se aplican automáticamente.
+
 ## Estructura
 
 ```text
@@ -250,6 +271,7 @@ php2shell-agent/
 │   ├── php2shell-scan.sh
 │   ├── php2shell-triage.sh
 │   ├── php2shell-bt.sh
+│   ├── php2shell-session-config.sh
 │   └── lib.sh
 ├── vendor/php2shellbt/          # copia MIT parcheada
 ├── docs/COMMANDS.md
@@ -266,6 +288,7 @@ php2shell-agent/
 - El agente no edita archivos, no navega por su cuenta y no ejecuta `sudo`.
 - El triaje es de solo lectura y no borra malware ni "limpia" el servidor.
 - La prueba avanzada de sesión puede escribir ficheros de sesión y probar un LFI. Requiere confirmación adicional.
+- La auditoría de configuración de CVE-2026-115560 es de solo lectura y no envía tráfico.
 - Los informes pueden contener IPs, rutas y datos internos. No los publiques.
 
 Más detalles en [SECURITY.md](SECURITY.md) y en [docs/COMMANDS.md](docs/COMMANDS.md).
@@ -275,13 +298,14 @@ Más detalles en [SECURITY.md](SECURITY.md) y en [docs/COMMANDS.md](docs/COMMAND
 - Scanner: [assetnote/php2shell-scanner](https://github.com/assetnote/php2shell-scanner), commit `353545fe…`.
 - Triaje: [gist de Sairahcaz](https://gist.github.com/Sairahcaz/2c22b4a68fd5b75e410c7f9f69f485a0), revisión `ec40176…`.
 - Cadena de sesión: [pentestershell/php2shellbt](https://github.com/pentestershell/php2shellbt), commit `621f557…`, MIT.
+- CVE-2026-115560 y guía de mitigación: [syhunt/php2shell-protection](https://github.com/syhunt/php2shell-protection), MIT, y [aviso de PHP del 23/10/2026](https://www.php.net/archive/2026.php#2026-10-23-1).
 - Descubrimiento original: [equipo Calif](https://calif.io/php2shell/).
 
-Sin afiliación ni respaldo de Assetnote, Sairahcaz, pentestershell ni Calif. Ver [SOURCES.md](SOURCES.md).
+Sin afiliación ni respaldo de Assetnote, Sairahcaz, pentestershell, Syhunt ni Calif. Ver [SOURCES.md](SOURCES.md).
 
 ## Licencia
 
-El código de este repositorio se publica bajo licencia MIT. El scanner de Assetnote y el gist de Sairahcaz no incluyen licencia y **no se redistribuyen**; el instalador los descarga desde su origen con versión fijada y hash verificado. `php2shellbt` usa licencia MIT y se incluye vendorizado con su licencia y sus parches documentados. Consulta [SOURCES.md](SOURCES.md).
+El código de este repositorio se publica bajo licencia MIT. El scanner de Assetnote y el gist de Sairahcaz no incluyen licencia y **no se redistribuyen**; el instalador los descarga desde su origen con versión fijada y hash verificado. `php2shellbt` usa licencia MIT y se incluye vendorizado con su licencia y sus parches documentados. La guía de Syhunt se enlaza, no se vendoriza. Consulta [SOURCES.md](SOURCES.md).
 
 ## Desarrollo
 

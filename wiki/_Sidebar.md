@@ -6,6 +6,7 @@
 - [Resultados](Resultados)
 - [Seguridad y permisos](Seguridad)
 - [Cadena de sesión](Cadena-de-sesion)
+- [CVE-2026-115560](CVE-2026-115560)
 - [Triaje](Triaje)
 - [Problemas frecuentes](Problemas-frecuentes)
 - [Preguntas frecuentes](Preguntas-frecuentes)

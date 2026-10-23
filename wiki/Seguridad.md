@@ -37,6 +37,20 @@ La [cadena de sesión avanzada](Cadena-de-sesion) es todavía más intrusiva que
 
 Úsela solo en entornos propios o con autorización por escrito, preferiblemente en pruebas o en una ventana de mantenimiento. El agente exige una confirmación adicional y no acepta listas de objetivos.
 
+## CVE-2026-115560 y configuración de sesión
+
+La auditoría de [CVE-2026-115560](CVE-2026-115560) es de solo lectura y no envía tráfico. Revisa la configuración del proyecto, pero no puede ver la configuración efectiva del hosting ni valores dinámicos.
+
+La mitigación recomendada es desactivar upload progress en la configuración efectiva del servidor:
+
+```ini
+session.upload_progress.enabled = 0
+```
+
+Debe aplicarse antes del parseo de la petición y reiniciar los workers. No confíe solo en `ini_set()` ni en `.user.ini`.
+
+Bloquear todo el tráfico multipart puede romper subidas legítimas; no lo aplique sin probarlo.
+
 ## Qué permisos tiene el agente
 
 El agente está diseñado para trabajar con permisos limitados:

@@ -22,6 +22,7 @@ for phrase in \
   "preflight.sh --brief" \
   "php2shell-triage.sh --summary" \
   "php2shell-bt.sh" \
+  "php2shell-session-config.sh" \
   "CONFIRMO LA PRUEBA AVANZADA" \
   "NO SIGNAL" \
   "Assetnote" \
