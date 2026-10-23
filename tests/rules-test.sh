@@ -68,7 +68,11 @@ printf '# sigma fixture\n' > "$FIX/php2shell.yaml"
 
 export PHP2SHELL_DATA_DIR="$DATA"
 export PHP2SHELL_STATE_DIR="$STATE"
-export PHP2SHELL_RULES_RAW_BASE="file://$FIX"
+if command -v cygpath >/dev/null 2>&1; then
+  export PHP2SHELL_RULES_RAW_BASE="file://$(cygpath -m "$FIX")"
+else
+  export PHP2SHELL_RULES_RAW_BASE="file://$FIX"
+fi
 export PHP2SHELL_RULES_SHA256_MODSECURITY="$(hash_of "$FIX/modsecurity.conf")"
 export PHP2SHELL_RULES_SHA256_LUA="$(hash_of "$FIX/php2shell.lua")"
 export PHP2SHELL_RULES_SHA256_RULES="$(hash_of "$FIX/php2shell.rules")"
