@@ -139,6 +139,8 @@ check_integrity() {
   check_file "triaje (gist)" "$VENDOR_DIR/php2shell-triage.sh"
   check_file "wrapper de escaneo" "$TOOLS_DIR/php2shell-scan.sh"
   check_file "wrapper de triaje" "$TOOLS_DIR/php2shell-triage.sh"
+  check_file "wrapper avanzado" "$TOOLS_DIR/php2shell-bt.sh"
+  check_file "php2shellbt.py" "$VENDOR_DIR/php2shellbt.py"
   check_file "preflight" "$TOOLS_DIR/preflight.sh"
 
   if [[ -f "$SCANNER_DIR/scanner.py" ]]; then
@@ -164,6 +166,17 @@ check_integrity() {
       [[ "$JSON" == "1" ]] || err "SHA-256 del triaje incorrecto: $actual"
       INTEGRITY=1
       add_note "El script de triaje no coincide con el hash fijado"
+    fi
+  fi
+
+  if [[ -f "$VENDOR_DIR/php2shellbt.py" ]]; then
+    actual="$(sha256_of "$VENDOR_DIR/php2shellbt.py")"
+    if [[ "$actual" == "$PHP2SHELL_BT_SHA256" ]]; then
+      [[ "$JSON" == "1" ]] || ok "php2shellbt con SHA-256 correcto"
+    else
+      [[ "$JSON" == "1" ]] || err "SHA-256 de php2shellbt incorrecto: $actual"
+      INTEGRITY=1
+      add_note "php2shellbt no coincide con el hash fijado"
     fi
   fi
 
@@ -251,6 +264,12 @@ print_commands() {
   info "              Prueba activa. Exige --i-have-permission. Escribe JSON."
   info "  triaje      $TOOLS_DIR/php2shell-triage.sh <ruta>"
   info "              Solo lectura del sistema. Escribe un informe .txt."
+  info "  avanzado    $TOOLS_DIR/php2shell-bt.sh --dry-run ..."
+  info "              Cadena de sesión. Exige --i-have-permission. Escribe JSON."
+  info "  reglas      $TOOLS_DIR/php2shell-rules.sh --install --profile alert"
+  info "              Reglas de defensa. Perfil alert por defecto."
+  info "  sesión      $TOOLS_DIR/php2shell-session-audit.sh"
+  info "              Solo lectura. Se ejecuta dentro del triaje."
   info "  curl        curl -sS -D - -o /dev/null --max-time 20 ..."
   info "              Solo cabeceras. No escribe archivos."
   info "  php -v      Solo lectura."

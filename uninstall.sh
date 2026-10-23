@@ -169,6 +169,7 @@ done
 remove_file "$TOOLS_DIR/preflight.sh"
 remove_file "$TOOLS_DIR/php2shell-scan.sh"
 remove_file "$TOOLS_DIR/php2shell-triage.sh"
+remove_file "$TOOLS_DIR/php2shell-bt.sh"
 remove_file "$TOOLS_DIR/php2shell-rules.sh"
 remove_file "$TOOLS_DIR/php2shell-session-audit.sh"
 remove_file "$TOOLS_DIR/lib.sh"

@@ -27,6 +27,16 @@ Si el servidor pertenece a un cliente, obtenga la autorización por escrito. Si 
 
 Probar un servidor sin autorización puede tener consecuencias legales y técnicas.
 
+## La prueba avanzada de sesión
+
+La [cadena de sesión avanzada](Cadena-de-sesion) es todavía más intrusiva que el escaneo normal:
+
+- Escribe ficheros de sesión en el servidor.
+- El check de LFI envía un marcador PHP y comprueba si se ejecuta.
+- Puede dejar rastros que no se limpian automáticamente.
+
+Úsela solo en entornos propios o con autorización por escrito, preferiblemente en pruebas o en una ventana de mantenimiento. El agente exige una confirmación adicional y no acepta listas de objetivos.
+
 ## Qué permisos tiene el agente
 
 El agente está diseñado para trabajar con permisos limitados:

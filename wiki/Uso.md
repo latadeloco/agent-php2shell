@@ -133,3 +133,5 @@ El agente solo le dará la ruta; no vuelca las firmas en el chat.
 ## Siguiente paso
 
 Consulte [Resultados](Resultados) para entender qué significa cada veredicto y qué hacer después.
+
+Si el resultado es **VULNERABLE** y dispone de las rutas necesarias, el agente puede ofrecer la [prueba avanzada de cadena de sesión](Cadena-de-sesion). Es opcional y más intrusiva: escribe ficheros de sesión y prueba un LFI.

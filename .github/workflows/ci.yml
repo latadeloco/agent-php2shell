@@ -25,6 +25,10 @@ jobs:
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
           bash tests/triage-test.sh
+          bash tests/rules-test.sh
+          bash tests/session-audit-test.sh
+          bash tests/bt-wrapper-test.sh
+          bash tests/bt-script-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
@@ -43,6 +47,10 @@ jobs:
           bash tests/preflight-test.sh
           bash tests/wrapper-test.sh
           bash tests/triage-test.sh
+          bash tests/rules-test.sh
+          bash tests/session-audit-test.sh
+          bash tests/bt-wrapper-test.sh
+          bash tests/bt-script-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 
@@ -67,6 +75,10 @@ jobs:
           bash tests/render-test.sh
           bash tests/wrapper-test.sh
           bash tests/triage-test.sh
+          bash tests/rules-test.sh
+          bash tests/session-audit-test.sh
+          bash tests/bt-wrapper-test.sh
+          bash tests/bt-script-test.sh
           bash tests/prompt-budget-test.sh
           bash tests/wiki-test.sh
 

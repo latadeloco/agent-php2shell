@@ -38,6 +38,7 @@ La herramienta pide confirmación antes de ejecutar la prueba activa. Puede revi
 - [Uso](Uso)
 - [Resultados](Resultados)
 - [Seguridad y permisos](Seguridad)
+- [Cadena de sesión avanzada](Cadena-de-sesion)
 - [Revisión de un posible ataque previo (triaje)](Triaje)
 - [Problemas frecuentes](Problemas-frecuentes)
 - [Preguntas frecuentes](Preguntas-frecuentes)

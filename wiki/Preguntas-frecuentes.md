@@ -77,6 +77,12 @@ Significa que la versión de PHP parece corregida y que la prueba no ha reproduc
 
 Significa que el fallo está presente. Debe actualizar PHP y volver a probar.
 
+## ¿Qué es la prueba avanzada de sesión?
+
+Es una comprobación opcional que revisa avisos de sesión, la confusión de `session.serialize_handler` y la cadena sesión + LFI.
+
+Es más intrusiva: escribe ficheros de sesión y puede enviar un marcador PHP al servidor. Solo debe usarse con autorización y con las rutas exactas. Consulte [Cadena de sesión](Cadena-de-sesion).
+
 ## ¿Puedo probar la web de un cliente?
 
 Solo si tiene autorización por escrito. Si no está seguro, no lo haga.

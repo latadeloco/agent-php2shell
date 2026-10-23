@@ -15,6 +15,9 @@ Este documento es el contrato de comandos del agente. Los wrappers son iguales p
 | `rules` | Reglas de defensa, perfil alerta | `php2shell-rules.sh --install --profile alert` | Sí (reglas) | Sí (descarga) | ask |
 | `rules --dry-run` | Revisar la descarga sin escribir | `php2shell-rules.sh --dry-run` | No | No | ask |
 | `session-audit` | Señales de sesión de solo lectura | `php2shell-session-audit.sh [ruta]` | No | No | ask |
+| `bt` | Cadena de sesión avanzada (solo `warn`) | `php2shell-bt.sh --i-have-permission -u <URL> --checks warn` | Sí (JSON) | Sí | ask |
+| `bt --advanced` | Handler mismatch + LFI (rutas explícitas) | `php2shell-bt.sh --i-have-permission --advanced -u <URL> --lfi ... --write-path ... --read-path ...` | Sí (JSON) | Sí | ask |
+| `bt --dry-run` | Revisar el comando sin ejecutar | `php2shell-bt.sh --dry-run -u <URL>` | No | No | ask |
 | `curl` | Leer cabeceras | `curl -sS -D - -o /dev/null --max-time 20 ...` | No | Sí | allow |
 | `php -v` | Versión local | `php -v` | No | No | allow |
 | `date` | Nombre del informe | `date -u +%Y%m%dT%H%M%SZ` | No | No | allow |
@@ -37,6 +40,8 @@ Los modos `preflight --check` y `triage` sin `--summary` quedan para cuando se p
 
 El módulo `rules` es opcional y no interviene en el flujo normal: solo se ofrece tras un `VULNERABLE` o si se pide. El perfil por defecto es `alert`; `block` requiere pedirlo y avisar de los falsos positivos. La auditoría de sesión se ejecuta dentro de `triage` y nunca cambia su veredicto.
 
+El módulo `bt` es avanzado y opcional. Se ofrece tras un `VULNERABLE` o si se pide. Por defecto ejecuta solo `warn` (avisos de sesión). `--advanced` habilita `handler` y `lfi` y exige rutas explícitas. El check `lfi` escribe un fichero de sesión y prueba un marcador PHP: no es una prueba pasiva. Requiere `--i-have-permission` y una confirmación adicional.
+
 ## Permisos de opencode
 
 ```yaml
@@ -48,6 +53,7 @@ shell:
   "<TOOLS_DIR>/preflight.sh*": allow
   "<TOOLS_DIR>/php2shell-scan.sh*": ask
   "<TOOLS_DIR>/php2shell-triage.sh*": ask
+  "<TOOLS_DIR>/php2shell-bt.sh*": ask
   "<TOOLS_DIR>/php2shell-rules.sh*": ask
   "<TOOLS_DIR>/php2shell-session-audit.sh*": ask
   "curl -sS -D - -o /dev/null --max-time *": allow
@@ -89,7 +95,7 @@ Archivo `~/.gemini/commands/php2shell.toml` (global) o `.gemini/commands/php2she
 | 0 | Todo correcto o veredicto sin vulnerabilidad |
 | 1 | Vulnerable (scanner) o falta una dependencia (preflight) |
 | 2 | Error de integridad/permisos o fallo al guardar el informe |
-| 3 | El wrapper de escaneo no recibió `--i-have-permission` |
+| 3 | El wrapper de escaneo o `bt` no recibió `--i-have-permission` |
 
 ## Flujo de seguridad
 
@@ -98,5 +104,7 @@ Archivo `~/.gemini/commands/php2shell.toml` (global) o `.gemini/commands/php2she
 3. Confirmación del usuario
 4. `scan --i-have-permission`
 5. Informe
-6. Oferta de triaje
-7. `triage --summary`
+6. [Opcional] `bt --dry-run` → confirmación avanzada → `bt --advanced`
+7. Oferta de triaje
+8. `triage --summary`
+9. [Opcional] `rules --install --profile alert`
